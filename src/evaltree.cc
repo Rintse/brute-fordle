@@ -214,7 +214,7 @@ void EvalTree::show_remaining() const {
             << std::setw(COL_W) << std::left << "Avg words after\n";
     }
     
-    if(words_left->size() < SHOW_LEFT_C) {
+    if(words_left->size() <= SHOW_LEFT_C) {
         for(auto &word : *words_left) {
             std::cout 
                 << std::setw(COL_W) << std::left << word

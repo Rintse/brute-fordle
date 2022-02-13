@@ -2,8 +2,8 @@
 Beat your friends at [wordle](https://www.nytimes.com/games/wordle/index.html).
 
 Literally just maintains [a list of words](include/solver.h#L39) that fit the guesses made so far.
-Suggests words to guess based on how many words, on average, are left in the list after that guess is made. 
-Assumes all words are equally likely to be the sought after word.
+Greedily suggests words to guess based on how many words, on average, are left in the list after that 
+guess is made. Assumes all words are equally likely to be the sought after word.
 
 Uses a [tree structure](include/evaltree.h) to [compress](src/evaltree.cc#L157) this data, and to 
 allow for the [re-use of certain intermediate results](src/evaltree.cc#L172). This gives the program a 

@@ -208,7 +208,7 @@ void EvalTree::show_remaining() const {
         << "\nGuessed so far: [" << guessed << "]\n\n"
         << "POSSIBLE WORDS: " << words_left->size() << "\n";
 
-    if(words_left->size() < SHOW_LEFT_C) {
+    if(words_left->size() <= SHOW_LEFT_C) {
         std::cout
             << std::setw(COL_W) << std::left << "Guessed word" 
             << std::setw(COL_W) << std::left << "Avg words after\n";

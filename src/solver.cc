@@ -85,9 +85,6 @@ void WordleSolver::update(
     for(int i = 0; i < guess.length(); i++) {
         if(marks[i] == 'c') {
             result.push_back(std::make_unique<EvalPlace>(i, guess[i]));
-            if(guessed[i] == '.') {
-                known_places[i].push_back(guess[i]);
-            }
             places[guess[i]]++;
         }
     }
@@ -97,7 +94,6 @@ void WordleSolver::update(
             result.push_back(std::make_unique<EvalWrong>(
                 i, guess[i], places[guess[i]]
             ));
-            known_wrongs.insert(guess[i]);
         }
     }
 

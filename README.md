@@ -18,5 +18,5 @@ round using the `-s` argument.
 
 ## Dictionaries
 The program expects a dictionary with all lowercase words.
-Any dictionary may be used as an input file. If one specifies the `-l n` argument, the program automatically 
+If one specifies the `-l n` argument, the program automatically 
 filters out all words that do not have length `n`.

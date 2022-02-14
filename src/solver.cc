@@ -76,24 +76,28 @@ void WordleSolver::update(
     }
 
     // TODO: can this be done in a prettier way than 3 consecutive loops?
-    for(size_t i = 0; i < guess.length(); i++) {
+    for(int i = 0; i < guess.length(); i++) {
         if(marks[i] == 'v') {
             result.push_back(std::make_unique<EvalRight>(i, guess[i]));
         }
     }
     
-    for(size_t i = 0; i < guess.length(); i++) {
+    for(int i = 0; i < guess.length(); i++) {
         if(marks[i] == 'c') {
             result.push_back(std::make_unique<EvalPlace>(i, guess[i]));
+            if(guessed[i] == '.') {
+                known_places[i].push_back(guess[i]);
+            }
             places[guess[i]]++;
         }
     }
     
-    for(size_t i = 0; i < guess.length(); i++) {
+    for(int i = 0; i < guess.length(); i++) {
         if(marks[i] == 'x') {
             result.push_back(std::make_unique<EvalWrong>(
                 i, guess[i], places[guess[i]]
             ));
+            known_wrongs.insert(guess[i]);
         }
     }
 

@@ -48,14 +48,14 @@ int main(int argc, char** argv) {
     bool suggest = !argparser.get<bool>("-s");
     
     // The main solver
-    WordleSolver guess(dict_name, wlen);
+    WordleSolver solver(dict_name, wlen);
 
     // Hold input strings
     std::string word;
     std::string marks;
     
-    while(!guess.done()) {
-        if(suggest) guess.calculate_best_guess();
+    while(!solver.done()) {
+        if(suggest) solver.calculate_best_guess();
 
         // Await user input
         std::cout 
@@ -69,12 +69,12 @@ int main(int argc, char** argv) {
         
         // Get guess
         std::cin >> word;
-        if(word == "!q") break;
+        if(word == "!q") { break; }
 
         // And its result
         std::cin >> marks;
         
-        try { guess.update(word, marks); } 
+        try { solver.update(word, marks); } 
 
         catch (std::runtime_error e) {
             std::cout 

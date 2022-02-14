@@ -30,7 +30,7 @@ void EvalRight::filter(
 } 
         
 std::ostream& EvalRight::print(std::ostream& s) const {
-    s << "Right, " << (int) idx << " , " << letter;
+    s << "Right, " << idx << " , " << letter;
     return s;
 }
 
@@ -49,7 +49,7 @@ void EvalPlace::filter(
 } 
 
 std::ostream& EvalPlace::print(std::ostream& s) const {
-    s << "Place, " << (int) idx << " , " << letter;
+    s << "Place, " << idx << " , " << letter;
     return s;
 }
 
@@ -76,7 +76,7 @@ void EvalWrong::filter(
 }
 
 std::ostream& EvalWrong::print(std::ostream& s) const {
-    s << "Wrong, " << (int) idx << " , " << letter;
+    s << "Wrong, " << idx << " , " << letter;
     if(allow != 0) { s << " (allow " << allow << ")"; }
     return s;
         }

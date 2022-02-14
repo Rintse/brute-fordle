@@ -28,7 +28,7 @@ class WordleSolver {
         bool done() const;
 
         // Does what it says on the tin
-        void calculate_best_guess() const ;
+        void calculate_best_guess() const;
 
     private:
         // Reads in a dictionary file

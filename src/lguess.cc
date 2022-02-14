@@ -1,8 +1,6 @@
 #include "lguess.h"
 #include <iostream>
 
-#define VERBOSE false
-        
 bool LetterEval::operator <(const LetterEval &g) const { 
     if(type == g.type) {
         if(idx == g.idx) {
@@ -24,15 +22,6 @@ void EvalRight::filter(
     std::string &got
 ) const 
 {
-    if(VERBOSE) {
-        std::cerr 
-            << "removing words that do not contain " 
-            << letter 
-            << " at position "
-            << (int) idx 
-            << std::endl ;
-    }
-
     std::erase_if(*dict, 
         [this](const std::string &s){ return s[idx] != letter; }
     );
@@ -51,15 +40,6 @@ void EvalPlace::filter(
     std::string &got
 ) const 
 {
-    if(VERBOSE) {
-        std::cerr 
-            << "removing words that dont contain " 
-            << letter
-            << " and words that contain it at position"
-            << (int) idx
-            << std::endl ;
-    }
-
     std::erase_if(*dict, 
         [this](const std::string &s){ 
             return s.find(letter) == std::string::npos
@@ -79,14 +59,6 @@ void EvalWrong::filter(
     std::string &got
 ) const 
 {
-    if(VERBOSE) {
-        std::cerr 
-            << "removing words that contain " 
-            << letter 
-            << " in an unguessed position"
-            << std::endl;
-    }
-
     std::erase_if(*dict,
         [this, got](const std::string &s){ 
             int found = 0;

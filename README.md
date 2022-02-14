@@ -1,5 +1,6 @@
 # brute-fordle
 Beat your friends at [wordle](https://www.nytimes.com/games/wordle/index.html).
+Or perhaps just witness how this thing solves wordles (it seems to make no sense at first, but then somehow it beats you.)
 
 Literally just maintains [a list of words](include/solver.h#L39) that fit the guesses made so far.
 Greedily suggests words to guess based on how many words, on average, are left in the list after that 

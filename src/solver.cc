@@ -3,6 +3,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <iterator>
 
 
 // Word guess: collection of letter guesses

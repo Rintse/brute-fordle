@@ -8,6 +8,7 @@
 #include "bar.h"
 #include "evalnode.h"
 
+#include <cstddef>
 #include <memory>
 #include <vector>
 #include <map>
@@ -15,8 +16,6 @@
 
 using scoremap = std::map<double, std::list<std::string>>;
 
-std::vector<std::unique_ptr<LetterEval>>
-evaluate(std::string guess, std::string word);
 
 class EvalTree {
     public:
@@ -47,6 +46,10 @@ class EvalTree {
         void show_remaining() const;
 
     private:
+        // Generates an evaluation of a guess against a word
+        std::vector<std::unique_ptr<LetterEval>>
+        evaluate(const std::string& guess, std::string word);
+
         // Generates all possible evaluations
         void generate_evaluations();
 
@@ -72,6 +75,8 @@ class EvalTree {
         const std::list<std::string>* dict;
         // All the words still in the running
         const std::list<std::string>* words_left;
+        const int wlen;
+        
         // Root of the tree
         const std::unique_ptr<EvalNode> root;
 

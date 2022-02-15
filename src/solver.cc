@@ -63,7 +63,7 @@ bool WordleSolver::done() const {
 
 
 // TODO: see if we can do something about the code 
-// duplicaiton with judge(...) in evaltree.cc
+// duplicaiton with evaluate(...) in evaltree.cc
 void WordleSolver::update(
     const std::string& guess, 
     const std::string& marks
@@ -76,20 +76,20 @@ void WordleSolver::update(
     }
 
     // TODO: can this be done in a prettier way than 3 consecutive loops?
-    for(int i = 0; i < guess.length(); i++) {
+    for(size_t i = 0; i < guess.length(); i++) {
         if(marks[i] == 'v') {
             result.push_back(std::make_unique<EvalRight>(i, guess[i]));
         }
     }
     
-    for(int i = 0; i < guess.length(); i++) {
+    for(size_t i = 0; i < guess.length(); i++) {
         if(marks[i] == 'c') {
             result.push_back(std::make_unique<EvalPlace>(i, guess[i]));
             places[guess[i]]++;
         }
     }
     
-    for(int i = 0; i < guess.length(); i++) {
+    for(size_t i = 0; i < guess.length(); i++) {
         if(marks[i] == 'x') {
             result.push_back(std::make_unique<EvalWrong>(
                 i, guess[i], places[guess[i]]

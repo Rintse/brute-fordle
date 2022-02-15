@@ -76,7 +76,7 @@ int main(int argc, char** argv) {
         
         try { solver.update(word, marks); } 
 
-        catch (std::runtime_error e) {
+        catch (std::runtime_error& e) {
             std::cout 
                 << "Something went wrong processing guess: " 
                 << e.what() << "\n";

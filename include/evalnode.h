@@ -11,7 +11,7 @@
 // We want the children map to be sorted by LetterEval's 
 // < operator, so we have to supply a lambda to the map 
 // declaration that sorts using the dereferenced elements
-auto wnode_cmp = [](
+inline auto wnode_cmp = [](
     const std::unique_ptr<LetterEval> &l1, 
     const std::unique_ptr<LetterEval> &l2
 ) {

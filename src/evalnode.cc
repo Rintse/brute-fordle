@@ -38,7 +38,7 @@ void EvalNode::insert(
     const auto &[child,inserted] = children.emplace(
         std::move(q.at(idx)), std::make_unique<EvalNode>()
     );
-    const auto &[_, node] = *child;
+    const auto &[_,node] = *child;
 
     // This is a duplicate leaf inc multiplicity
     if(!inserted && node->children.empty()) { 

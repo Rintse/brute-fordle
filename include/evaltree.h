@@ -63,8 +63,8 @@ class EvalTree {
         void get_e(
             std::string s, 
             const EvalNode* cur, 
-            std::list<std::string>& d, 
-            std::string g
+            const std::list<std::string>& d, 
+            const std::string& g
         );
         
         // Holds the letters we already know are right

@@ -12,7 +12,8 @@
 #define COL_W 15
 // Number of suggestions in the table
 #define SUGGESTION_C 10
-
+// Number of evaluations to work out before inserting
+#define BATCH_C
 
 EvalTree::EvalTree(
     std::list<std::string>* wl,
@@ -86,6 +87,7 @@ EvalTree::evaluate(const std::string& guess, std::string word) {
 void EvalTree::generate_evaluations() {
     std::cout << "\nCalculating all possible evaluations\n";
     lbar = std::make_unique<LoadingBar>(dict->size()*words_left->size());
+    std::vector<std::vector<LetterEval*>>* tmp;
 
     for(auto &guess : *dict) {
         for(auto &word : *words_left) {
@@ -97,10 +99,12 @@ void EvalTree::generate_evaluations() {
     }
 }
 
+
 // Recusrive wrapper
 size_t EvalTree::size() const { 
     return root->size(); 
 }
+
 
 // Recusrive wrapper
 void EvalTree::print() const { 
@@ -108,11 +112,21 @@ void EvalTree::print() const {
     root->print(0); 
 }
 
+
 // Recusrive wrapper
 void EvalTree::insert(
     std::vector<std::unique_ptr<LetterEval>>& q
 ) { 
     root->insert(q, 0); 
+}
+
+
+// Writing this out mid-function is too ugly and hinders readability imo
+bool list_contains(
+    const std::list<std::string>* l, 
+    const std::string& s
+) {
+    return std::find(l->begin(), l->end(), s) != l->end();
 }
 
 
@@ -133,12 +147,13 @@ void EvalTree::generate_elims() {
 
     leftover_scores.clear();
     for(auto &[w,l] : elims) {
-        double avg = std::accumulate(l.begin(), l.end(), 0.0) / l.size();
+        const double avg = 
+            std::accumulate(l.begin(), l.end(), 0.0)
+            / l.size();
 
         if( // Easy lookup for leftover words
             words_left->size() <= SHOW_LEFT_C &&
-            std::find(words_left->begin(), words_left->end(), w) != 
-            words_left->end()
+            list_contains(words_left, w)
         ) { 
             leftover_scores[w] = avg; 
         }
@@ -153,8 +168,8 @@ void EvalTree::generate_elims() {
 void EvalTree::get_e(
     std::string s, 
     const EvalNode* cur,
-    std::list<std::string>& d,
-    std::string g
+    const std::list<std::string>& d,
+    const std::string& g
 ) {
     // End of recursion, store result
     if(cur->children.empty()) {

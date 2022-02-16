@@ -87,7 +87,6 @@ EvalTree::evaluate(const std::string& guess, std::string word) {
 void EvalTree::generate_evaluations() {
     std::cout << "\nCalculating all possible evaluations\n";
     lbar = std::make_unique<LoadingBar>(dict->size()*words_left->size());
-    std::vector<std::vector<LetterEval*>>* tmp;
 
     for(auto &guess : *dict) {
         for(auto &word : *words_left) {

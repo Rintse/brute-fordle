@@ -16,8 +16,7 @@ class LetterEval {
         virtual ~LetterEval() {}
 
         virtual void filter(
-            std::list<std::string>* dict,
-            std::string& got
+            std::list<std::string>* const dict
         ) const = 0;
 
         virtual std::ostream& print(std::ostream& s) const = 0;
@@ -44,8 +43,7 @@ class EvalRight : public LetterEval {
         ~EvalRight(){}
         
         void filter(
-            std::list<std::string>* dict,
-            std::string & got
+            std::list<std::string>* const dict
         ) const; 
 
         std::ostream& print(std::ostream& s) const;
@@ -62,8 +60,7 @@ class EvalPlace : public LetterEval {
         ~EvalPlace(){}
         
         void filter(
-            std::list<std::string>* dict,
-            std::string & got
+            std::list<std::string>* const dict
         ) const; 
 
         std::ostream& print(std::ostream& s) const;
@@ -82,8 +79,7 @@ class EvalWrong : public LetterEval {
         ~EvalWrong(){}
         
         void filter(
-            std::list<std::string>* dict,
-            std::string & got
+            std::list<std::string>* const dict
         ) const; 
 
         std::ostream& print(std::ostream& s) const;

@@ -35,7 +35,7 @@ class EvalTree {
         // Inserts a wordguess into the tree
         // Increases the final leaf's multiplicity
         // field if it already exists
-        void insert(std::vector<std::unique_ptr<LetterEval>>& q);
+        void insert(std::vector<std::unique_ptr<const LetterEval>>& q);
 
         // Sorts guesses on how many words are left and shows the best
         void best_guesses() const;
@@ -47,7 +47,7 @@ class EvalTree {
 
     private:
         // Generates an evaluation of a guess against a word
-        std::vector<std::unique_ptr<LetterEval>>
+        std::vector<std::unique_ptr<const LetterEval>>
         evaluate(const std::string& guess, std::string word);
 
         // Generates all possible evaluations
@@ -63,13 +63,10 @@ class EvalTree {
         void get_e(
             std::string s, 
             const EvalNode* cur, 
-            const std::list<std::string>& d, 
-            const std::string& g
+            const std::list<std::string>& d
         );
         
         // Holds the letters we already know are right
-        // Used in the filter functions of LetterGuess
-        // Contains a '.' for non-guessed letters.
         const std::string guessed;
         // The entire dictionary
         const std::list<std::string>* dict;

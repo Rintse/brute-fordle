@@ -17,16 +17,10 @@ std::ostream& operator << (std::ostream& s, const LetterEval& l) {
 }
 
 
-void EvalRight::filter(
-    std::list<std::string>* dict,
-    std::string &got
-) const 
-{
+void EvalRight::filter(std::list<std::string>* const dict) const {
     std::erase_if(*dict, 
         [this](const std::string &s){ return s[idx] != letter; }
     );
-    
-    got[idx] = letter;
 } 
         
 std::ostream& EvalRight::print(std::ostream& s) const {
@@ -35,14 +29,10 @@ std::ostream& EvalRight::print(std::ostream& s) const {
 }
 
 
-void EvalPlace::filter(
-    std::list<std::string>* dict,
-    std::string &got
-) const 
-{
+void EvalPlace::filter(std::list<std::string>* const dict) const {
     std::erase_if(*dict, 
-        [this](const std::string &s){ 
-            return s.find(letter) == std::string::npos
+        [this](const std::string &s) { return 
+            s.find(letter) == std::string::npos
             || s[idx] == letter; 
         }
     );
@@ -54,19 +44,13 @@ std::ostream& EvalPlace::print(std::ostream& s) const {
 }
 
 
-void EvalWrong::filter(
-    std::list<std::string>* dict,
-    std::string &got
-) const 
-{
+void EvalWrong::filter(std::list<std::string>* const dict) const {
     std::erase_if(*dict,
-        [this, got](const std::string &s){ 
+        [this](const std::string &s){ 
             int found = 0;
 
             for(size_t i = 0; i < s.length(); i++) {
-                if(s[i] == letter && got[i] == '.') {
-                    found++;
-                }
+                if(s[i] == letter) found++;
             }
 
             if (found > allow) return true;

@@ -3,6 +3,7 @@
 #include <memory>
 #include <numeric>
 
+
 EvalNode::EvalNode() { multiplicity = 1; }
 
 
@@ -30,7 +31,7 @@ void EvalNode::print(const int depth) const {
 
 
 void EvalNode::insert(
-    std::vector<std::unique_ptr<LetterEval>>& q, 
+    std::vector<std::unique_ptr<const LetterEval>>& q, 
     const size_t idx
 ) {
     if(idx == q.size()) return;

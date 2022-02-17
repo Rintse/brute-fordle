@@ -68,8 +68,9 @@ void WordleSolver::update(
     const std::string& guess, 
     const std::string& marks
 ) {
-    std::vector<std::unique_ptr<LetterEval>> result;
+    std::vector<std::unique_ptr<const LetterEval>> result;
     std::map<char,int> places;
+    for(auto &c : guessed) { places[c]++; }
 
     if(guess.length() != marks.length()) {
         throw std::runtime_error("Word and marks dont have equal length");
@@ -79,6 +80,8 @@ void WordleSolver::update(
     for(size_t i = 0; i < guess.length(); i++) {
         if(marks[i] == 'v') {
             result.push_back(std::make_unique<EvalRight>(i, guess[i]));
+            places[guess[i]]++;
+            guessed[i] = guess[i];
         }
     }
     
@@ -101,7 +104,7 @@ void WordleSolver::update(
         throw std::runtime_error("Invalid mark. Use [xcv]");
 
     for(auto &letter : result) {
-        letter->filter(words_left.get(), guessed);
+        letter->filter(words_left.get());
     }
 }
 

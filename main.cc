@@ -70,7 +70,6 @@ int main(int argc, char** argv) {
         // Get guess
         std::cin >> word;
         if(word == "!q") { break; }
-
         // And its result
         std::cin >> marks;
         
@@ -80,6 +79,8 @@ int main(int argc, char** argv) {
             std::cout 
                 << "Something went wrong processing guess: " 
                 << e.what() << "\n";
+
+            suggest = false;
             continue;
         }
 

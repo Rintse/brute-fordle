@@ -30,14 +30,15 @@ EvalTree::EvalTree(
 }
 
 
-std::vector<std::unique_ptr<LetterEval>> 
+std::vector<std::unique_ptr<const LetterEval>> 
 EvalTree::evaluate(const std::string& guess, std::string word) {
-    std::vector<std::unique_ptr<LetterEval>> result;
+    std::vector<std::unique_ptr<const LetterEval>> result;
     result.reserve(wlen);
 
     // Helper arrays
     std::vector<bool> done(wlen, false);
     std::map<char,int> places;
+    for(auto &c : guessed) { places[c]++; }
 
     // Correct letters
     for(size_t i = 0; i < guess.length(); i++) {
@@ -48,6 +49,7 @@ EvalTree::evaluate(const std::string& guess, std::string word) {
 
             word[i] = '.';
             done[i] = true;
+            places[guess[i]]++;
         }
     }
 
@@ -114,7 +116,7 @@ void EvalTree::print() const {
 
 // Recusrive wrapper
 void EvalTree::insert(
-    std::vector<std::unique_ptr<LetterEval>>& q
+    std::vector<std::unique_ptr<const LetterEval>>& q
 ) { 
     root->insert(q, 0); 
 }
@@ -138,7 +140,7 @@ void EvalTree::generate_elims() {
     lbar = std::make_unique<LoadingBar>(size());
 
     auto tmp_dict = *words_left;
-    get_e(std::string(wlen, ' '), root.get(), tmp_dict, guessed);
+    get_e(std::string(wlen, ' '), root.get(), tmp_dict);
 
     // Calculate the averages per word
     std::cout << "\nCalculating averages\n";
@@ -167,8 +169,7 @@ void EvalTree::generate_elims() {
 void EvalTree::get_e(
     std::string s, 
     const EvalNode* cur,
-    const std::list<std::string>& d,
-    const std::string& g
+    const std::list<std::string>& d
 ) {
     // End of recursion, store result
     if(cur->children.empty()) {
@@ -188,13 +189,12 @@ void EvalTree::get_e(
     for(auto &[guess, next] : cur->children) {
         // We need a copies to filter down
         std::list<std::string> td(d);
-        std::string tg(g);
 
-        guess->filter(&td, tg);
+        guess->filter(&td);
 
         // Build up the word and recurse
         s[guess->idx] = guess->letter;
-        get_e(s, next.get(), td, tg);
+        get_e(s, next.get(), td);
     }
 }
 

@@ -6,14 +6,14 @@
 #include <memory>
 #include <vector>
 #include <map>
-
+#include <functional>
 
 // We want the children map to be sorted by LetterEval's 
 // < operator, so we have to supply a lambda to the map 
 // declaration that sorts using the dereferenced elements
-inline auto wnode_cmp = [](
-    const std::unique_ptr<LetterEval> &l1, 
-    const std::unique_ptr<LetterEval> &l2
+const auto wnode_cmp = [](
+    const std::unique_ptr<const LetterEval> &l1, 
+    const std::unique_ptr<const LetterEval> &l2
 ) {
     return *l1 < *l2; 
 };
@@ -26,12 +26,12 @@ class EvalNode {
         size_t size() const;
         void print(const int depth) const;
         void insert(
-            std::vector<std::unique_ptr<LetterEval>>& q, 
+            std::vector<std::unique_ptr<const LetterEval>>& q, 
             const size_t idx
         );
         
         std::map<
-            const std::unique_ptr<LetterEval>,
+            const std::unique_ptr<const LetterEval>,
             const std::unique_ptr<EvalNode>,
             decltype(wnode_cmp)
         > children;

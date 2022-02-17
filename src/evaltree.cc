@@ -4,6 +4,7 @@
 #include <numeric>
 #include <assert.h>
 #include <iomanip>
+#include <unordered_map>
 
 // When there are fewer words left than this 
 // number we start listing them out
@@ -32,55 +33,43 @@ EvalTree::EvalTree(
 
 std::vector<std::unique_ptr<const LetterEval>> 
 EvalTree::evaluate(const std::string& guess, std::string word) {
-    std::vector<std::unique_ptr<const LetterEval>> result;
-    result.reserve(wlen);
+    std::vector<std::unique_ptr<const LetterEval>> res;
+    res.reserve(wlen);
 
-    // Helper arrays
-    std::vector<bool> done(wlen, false);
-    std::map<char,int> places;
-    for(auto &c : guessed) { places[c]++; }
+    size_t loc;
 
-    // Correct letters
-    for(size_t i = 0; i < guess.length(); i++) {
+    std::map<char,int> allow;
+    for(auto &c : guessed) { allow[c]++; }
+
+    std::vector<int> todo;
+    todo.reserve(wlen);
+
+    for(size_t i = 0; i < wlen; i++) {
+        // Correct letter
         if(guess[i] == word[i]) {
-            result.emplace_back(
-                std::make_unique<EvalRight>(i, guess[i])
-            );
-
+            res.emplace_back(std::make_unique<EvalRight>(i, guess[i]));
+            allow[guess[i]]++;
             word[i] = '.';
-            done[i] = true;
-            places[guess[i]]++;
         }
-    }
 
-    // Somewhere else in the word
-    for(size_t i = 0; i < guess.length(); i++) {
-        // Already marked as correct
-        if(done[i]) continue;
-
-        const size_t loc = word.find(guess[i]);
-        if(loc != std::string::npos) {
-            result.emplace_back(
-                std::make_unique<EvalPlace>(i, guess[i])
-            );
-
-            places[guess[i]]++;
-            word[loc] = ',';
-            done[i] = true;
+        // Wrong position
+        else if((loc = word.find(guess[i])) != std::string::npos) {
+            res.emplace_back(std::make_unique<EvalPlace>(i, guess[i]));
+            allow[guess[i]]++;
+            word[loc] = '.';
         }
-    
-    }
-    
-    // Not in word (except if already marked as a EvalPlace)
-    for(size_t i = 0; i < guess.length(); i++) {
-        if(done[i]) continue;
 
-        result.emplace_back(std::make_unique<EvalWrong>(
-            i, guess[i], places[guess[i]]
-        ));
+        // Not in word, fill in later
+        else { todo.push_back(i); }
     }
 
-    return result;
+    for(auto &i : todo) {
+        res.emplace_back(
+            std::make_unique<EvalWrong>(i, guess[i], allow[guess[i]])
+        );
+    }
+
+    return res;
 }
 
 

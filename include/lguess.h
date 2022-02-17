@@ -85,7 +85,7 @@ class EvalWrong : public LetterEval {
         std::ostream& print(std::ostream& s) const;
 
         // The amount of "letter"s to allow
-        const int allow;
+        int allow;
 };
 
 #endif

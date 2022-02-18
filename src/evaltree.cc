@@ -36,8 +36,6 @@ EvalTree::evaluate(const std::string& guess, std::string word) {
     std::vector<std::unique_ptr<const LetterEval>> res;
     res.reserve(wlen);
 
-    size_t loc;
-
     std::map<char,int> allow;
     for(auto &c : guessed) { allow[c]++; }
 
@@ -53,14 +51,21 @@ EvalTree::evaluate(const std::string& guess, std::string word) {
         }
 
         // Wrong position
-        else if((loc = word.find(guess[i])) != std::string::npos) {
-            res.emplace_back(std::make_unique<EvalPlace>(i, guess[i]));
-            allow[guess[i]]++;
-            word[loc] = '.';
-        }
+        else {
+            size_t loc = word.find(guess[i]);
+            while(loc != std::string::npos && guess[loc] == word[loc]) {
+                loc = word.find(guess[i], loc + 1);
+            }
 
-        // Not in word, fill in later
-        else { todo.push_back(i); }
+            if(loc != std::string::npos) {
+                res.emplace_back(std::make_unique<EvalPlace>(i, guess[i]));
+                allow[guess[i]]++;
+                word[loc] = '.';
+            }
+            
+            // Not in word, fill in later
+            else { todo.push_back(i); }
+        }
     }
 
     for(auto &i : todo) {

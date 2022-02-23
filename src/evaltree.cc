@@ -37,7 +37,9 @@ EvalTree::evaluate(const std::string& guess, std::string word) {
     res.reserve(wlen);
 
     std::map<char,int> allow;
-    for(auto &c : guessed) { allow[c]++; }
+    for(auto &c : guessed) { 
+        if(c != '.') allow[c]++; 
+    }
 
     std::vector<int> todo;
     todo.reserve(wlen);

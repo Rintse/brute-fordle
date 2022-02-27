@@ -6,6 +6,7 @@
 #include <argparse.h>
 
 #define DEFAULT_LENGTH 5
+#define DEFAULT_N 1
 
 // Specifies the arguments using the include/argparse.h header
 // on github @ https://github.com/p-ranav/argparse
@@ -17,6 +18,11 @@ argparse::ArgumentParser arg_spec() {
 
     program.add_argument("dictionary")
         .help("The dictionary to use when guessing");
+
+    program.add_argument("-n", "--wordlength")
+        .help("Guess on n instances simultaniously")
+        .default_value(DEFAULT_N)
+        .scan<'d', int>();
 
     program.add_argument("-l", "--wordlength")
         .help("Only words of this length will be used")
@@ -44,15 +50,16 @@ int main(int argc, char** argv) {
 
     // Argument parsing successful, grab arguments
     std::string dict_name = argparser.get<std::string>("dictionary");
+    int n_instances = argparser.get<int>("-n");
     int wlen = argparser.get<int>("-l");
     bool suggest = !argparser.get<bool>("-s");
     
     // The main solver
-    WordleSolver solver(dict_name, wlen);
+    WordleSolver solver(dict_name, wlen, n_instances);
 
     // Hold input strings
     std::string word;
-    std::string marks;
+    std::string mark;
     
     while(!solver.done()) {
         if(suggest) solver.calculate_best_guess();
@@ -70,8 +77,13 @@ int main(int argc, char** argv) {
         // Get guess
         std::cin >> word;
         if(word == "!q") { break; }
-        // And its result
-        std::cin >> marks;
+
+        // And its result(s)
+        std::vector<std::string> marks;
+        for(int i = 0; i < n_instances; i++) {
+            std::cin >> mark;
+            marks.push_back(mark);
+        }
         
         try { solver.update(word, marks); } 
 

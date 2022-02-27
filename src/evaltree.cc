@@ -21,6 +21,7 @@ EvalTree::EvalTree(
     std::list<std::string>* d, 
     std::string g
 ) :   
+    w_scores(std::make_unique<smap>()),
     guessed(g), dict(d), words_left(wl),
     wlen(d->front().length()),
     root(std::make_unique<EvalNode>()),
@@ -29,6 +30,16 @@ EvalTree::EvalTree(
     generate_evaluations();
     generate_elims();
 }
+    
+EvalTree::EvalTree(EvalTree&& e) : 
+    w_scores(std::move(e.w_scores)),
+    guessed(e.guessed),
+    dict(e.dict),
+    words_left(e.words_left),
+    wlen(e.wlen),
+    root(std::move(e.root)),
+    scores(std::move(e.scores))
+{}
 
 
 std::vector<std::unique_ptr<const LetterEval>> 
@@ -157,6 +168,7 @@ void EvalTree::generate_elims() {
 
         // Uses a map (score->word) such that scores are sorted upon insertion
         (*scores)[avg].push_back(w);
+        (*w_scores)[w] = avg;
         lbar->inc();
     }
 }

@@ -15,6 +15,7 @@
 #include <list>
 
 using scoremap = std::map<double, std::list<std::string>>;
+using smap = std::map<std::string, double>;
 
 
 class EvalTree {
@@ -24,6 +25,8 @@ class EvalTree {
             std::list<std::string>* d,      // complete dictionary
             std::string g                   // letters we got so far
         );
+        
+        EvalTree(EvalTree&& e);
         
         // Returns the amount of leaf nodes in the tree
         size_t size() const;
@@ -45,6 +48,7 @@ class EvalTree {
         // also prints the words and how many words are left if guessed
         void show_remaining() const;
 
+        std::unique_ptr<smap> w_scores;
     private:
         // Generates an evaluation of a guess against a word
         std::vector<std::unique_ptr<const LetterEval>>
@@ -71,11 +75,11 @@ class EvalTree {
         // The entire dictionary
         const std::list<std::string>* dict;
         // All the words still in the running
-        const std::list<std::string>* words_left;
+        std::list<std::string>* words_left;
         const int wlen;
         
         // Root of the tree
-        const std::unique_ptr<EvalNode> root;
+        std::unique_ptr<EvalNode> root;
 
         // For each word, we keep a list of how many words
         // are left after filtering each evalution

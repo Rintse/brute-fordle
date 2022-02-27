@@ -22,7 +22,8 @@ EvalTree::EvalTree(
     std::string g
 ) :   
     w_scores(std::make_unique<smap>()),
-    guessed(g), dict(d), words_left(wl),
+    words_left(wl),
+    guessed(g), dict(d), 
     wlen(d->front().length()),
     root(std::make_unique<EvalNode>()),
     scores(std::make_unique<scoremap>())
@@ -33,9 +34,9 @@ EvalTree::EvalTree(
     
 EvalTree::EvalTree(EvalTree&& e) : 
     w_scores(std::move(e.w_scores)),
+    words_left(e.words_left),
     guessed(e.guessed),
     dict(e.dict),
-    words_left(e.words_left),
     wlen(e.wlen),
     root(std::move(e.root)),
     scores(std::move(e.scores))

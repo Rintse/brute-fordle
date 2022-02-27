@@ -49,6 +49,10 @@ class EvalTree {
         void show_remaining() const;
 
         std::unique_ptr<smap> w_scores;
+        // All the words still in the running
+        std::list<std::string>* words_left;
+        // Easy lookup for leftover word scores
+        std::map<std::string, double> leftover_scores;
     private:
         // Generates an evaluation of a guess against a word
         std::vector<std::unique_ptr<const LetterEval>>
@@ -74,8 +78,6 @@ class EvalTree {
         const std::string guessed;
         // The entire dictionary
         const std::list<std::string>* dict;
-        // All the words still in the running
-        std::list<std::string>* words_left;
         const int wlen;
         
         // Root of the tree
@@ -86,8 +88,6 @@ class EvalTree {
         std::map<std::string, std::list<size_t>> elims;
         // The average of elims, in an inverted map structure
         std::unique_ptr<scoremap> scores;
-        // Easy lookup for leftover word scores
-        std::map<std::string, double> leftover_scores;
         
         // Loading bar for get_e 
         // (avoids having to pass it in the recursion)

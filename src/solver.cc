@@ -10,6 +10,8 @@
 // Number of suggestions in the table
 #define SUGG_C 10
 
+#define LEFT_C 16
+
 // Word guess: collection of letter guesses
 WordleSolver::WordleSolver(std::string filename, size_t l, int n) : wlen(l), n_instances(n) {
     // Read in a dictionary file
@@ -134,6 +136,7 @@ void WordleSolver::update(
 void WordleSolver::calculate_best_guess() const {
     std::vector<EvalTree> trees;
     for(int i = 0; i < n_instances; i++) {
+        std::cout << "\nInstance " << i << std::endl;
         trees.emplace_back(words_lefts[i].get(), dict.get(), guessed[i]);
     }
 
@@ -181,5 +184,38 @@ void WordleSolver::calculate_best_guess() const {
             if(++done >= SUGG_C) return;
         }
     }
+    
+    std::cout << "\nGuessed so far: ";
+
+    for(auto &i : guessed) {
+        std::cout << i << " ";
+    }
+
+    size_t left = 0;
+    for(auto &i : words_lefts) { left += i->size(); }
+
+    if(left <= LEFT_C) {
+        std::cout
+            << std::setw(COLUMN_W) << std::left << "Guessed word" 
+            << std::setw(COLUMN_W) << std::left << "Avg words after\n";
+    }
+    
+    if(left <= LEFT_C) {
+        for(int i = 0; i < trees.size(); i++) {
+            if(trees[i].words_left->size() == 0) {
+                std::cout 
+                    << "The word for instance " << i << " is " 
+                    << trees[i].words_left->front();
+                continue;
+            }
+            for(auto &word : *trees[i].words_left) {
+                std::cout 
+                    << std::setw(COLUMN_W) << std::left << word
+                    << std::setw(COLUMN_W) << std::left << trees[i].leftover_scores.at(word)
+                    << std::endl;
+            }
+        }
+    }
+    std::cout << "\n";
 }
 

@@ -1,6 +1,8 @@
 #include "solver.h"
 #include "evaltree.h"
 
+#include <algorithm>
+#include <cctype>
 #include <fstream>
 #include <iostream>
 #include <iterator>
@@ -23,14 +25,15 @@ void WordleSolver::read_dict(std::string filename, size_t wlen) {
     if(dict_file.is_open()){
         std::copy_if(
             std::istream_iterator<std::string>(dict_file),
-            std::istream_iterator<std::string>(), // OEF
+            std::istream_iterator<std::string>(), // Empty itertor is OEF
             std::back_inserter(*dict),
+
             // Only copies words of length wlen
             [wlen](const std::string &s) { 
                 return s.length() == wlen 
                 && std::all_of(
                     s.begin(), s.end(), 
-                    [](const char c){ return std::islower(c); }
+                    [](const char c){ return std::isalpha(c); }
                 ); 
             }
         );
@@ -40,6 +43,13 @@ void WordleSolver::read_dict(std::string filename, size_t wlen) {
         throw std::runtime_error("Error reading file."); 
     }
     
+    // Use only lower case letters in the rest of the program
+    for(auto &word : *dict) {
+        for(auto &i : word) {
+            i = std::tolower(i);
+        }
+    }
+
     // We start with all words still in the running
     words_left = std::make_unique<std::list<std::string>>(*dict);
 }

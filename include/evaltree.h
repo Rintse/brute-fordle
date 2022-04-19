@@ -79,7 +79,21 @@ class EvalTree {
 
         // For each word, we keep a list of how many words
         // are left after filtering each evalution
-        std::map<std::string, std::list<size_t>> elims;
+        struct Accumulator {
+            size_t total; // sum of all numbers
+            size_t count; // amount of numbers
+
+            // adds c times t to this Accumulator
+            void add(size_t t, size_t c) {
+                total += c * t;
+                count += c;
+            }
+
+            // Returns the avg of the numbers so far
+            double avg() { return (double) total / count; }
+        };
+
+        std::map<std::string, Accumulator> elims;
         // The average of elims, in an inverted map structure
         std::unique_ptr<scoremap> scores;
         // Easy lookup for leftover word scores

@@ -6,6 +6,7 @@
 #include <iomanip>
 #include <unordered_map>
 
+
 // When there are fewer words left than this 
 // number we start listing them out
 #define SHOW_LEFT_C 8
@@ -15,6 +16,7 @@
 #define SUGGESTION_C 10
 // Number of evaluations to work out before inserting
 #define BATCH_C
+
 
 EvalTree::EvalTree(
     std::list<std::string>* wl,
@@ -131,7 +133,7 @@ void EvalTree::generate_elims() {
     assert(dict->size() > 0);
     size_t wlen = dict->front().length();
 
-    // Calculate the leftover wordscounts for each evaluations
+    // Calculate the leftover wordscounts for each evaluation
     std::cout << "\nCalculating elimininations\n";
     lbar = std::make_unique<LoadingBar>(size());
 
@@ -143,20 +145,16 @@ void EvalTree::generate_elims() {
     lbar = std::make_unique<LoadingBar>(elims.size());
 
     leftover_scores.clear();
-    for(auto &[w,l] : elims) {
-        const double avg = 
-            std::accumulate(l.begin(), l.end(), 0.0)
-            / l.size();
-
+    for(auto &[w,a] : elims) {
         if( // Easy lookup for leftover words
             words_left->size() <= SHOW_LEFT_C &&
             list_contains(words_left, w)
         ) { 
-            leftover_scores[w] = avg; 
+            leftover_scores[w] = a.avg(); 
         }
 
         // Uses a map (score->word) such that scores are sorted upon insertion
-        (*scores)[avg].push_back(w);
+        (*scores)[a.avg()].push_back(w);
         lbar->inc();
     }
 }
@@ -173,9 +171,7 @@ void EvalTree::get_e(
         // We have tracked how often this path occurs in the
         // multiplicity field of the leaf. We can now simply
         // add the result of this path that number of times.
-        for(uint32_t i = 0; i < cur->multiplicity; i++) {
-            elims[s].push_back(d.size());
-        }
+        elims[s].add(d.size(), cur->multiplicity);
 
         lbar->inc(cur->multiplicity);
         return;

@@ -63,4 +63,4 @@ std::ostream& EvalWrong::print(std::ostream& s) const {
     s << "Wrong, " << idx << " , " << letter;
     if(allow != 0) { s << " (allow " << allow << ")"; }
     return s;
-        }
+}
